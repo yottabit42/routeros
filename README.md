@@ -3,7 +3,7 @@
 ## qos.rsc
 ### 2-Step QoS using using eight priorities and a preconfigured set of classifiers
 
-**Note:** The script assumes you are using the default `ether1` WAN/Internet
+**Important:** The script assumes you are using the default `ether1` WAN/Internet
 interface. If you are using something else, change this value everywhere in the
 script.
 
@@ -24,11 +24,19 @@ to ensure you see Queued bytes. If you do not see some queued bytes, the
   your generally available upload speed to your ISP, not through the ISP to the
   Internet.
 
+**Important:** The order in which the Firewall IP Mangle rules are entered is
+important for maximum efficiency. And specifically, the classifier for priority
+#8 (Bulk) is entered before the classifier for priority #7 (Default), as the
+rules are matched in order and priority #7 is being used as the default for no
+other matches. If you add new classifiers, be sure they are moved into the same
+area as the other classifers for the same class, and always before the
+`action=mark-packet` rule.
+
 The queue tree consists of a parent queue for managing the upstream rate of your
 Internet connection. (You generally cannot QoS the downstream connections as you
 do not have any control of the priority in which your ISP shuffles packets
-destined for your network. There is an exception when you wish to limit per-
-connection transfer rates, PCQ, but that is out of scope for this ruleset.)
+destined for your network. There is an exception when you wish to limit
+per-connection transfer rates, PCQ, but that is out of scope for this ruleset.)
 
 Under the parent queue are eight child queues, mapping to each of the eight
 priorities defined.

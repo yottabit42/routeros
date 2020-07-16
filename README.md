@@ -32,6 +32,8 @@ other matches. If you add new classifiers, be sure they are moved into the same
 area as the other classifers for the same class, and always before the
 `action=mark-packet` rule.
 
+#### General discussion
+
 The queue tree consists of a parent queue for managing the upstream rate of your
 Internet connection. (You generally cannot QoS the downstream connections as you
 do not have any control of the priority in which your ISP shuffles packets
@@ -90,9 +92,11 @@ lowest:
    * If you use IP address, ensure the IP addresses are configured statically on
      the device, or configured with a static rule in the DHCP server.
 1. Video calls. Any service on the network setting the DSCP bits to 40 will be
-   considered as voice calls. You should also add any dedicated voice-calling
-   devices by MAC address or IP address to a classifier rule, as setting DSCP
-   bits on non-enterprise networks is rarely done.
+   considered as voice calls. In addition Google Meets and Google Hangouts are
+   classified. You should also add any dedicated voice-calling devices by MAC
+   address or IP address to a classifier rule, as setting DSCP bits on
+   non-enterprise networks is rarely done.
+   * TODO: add classifers for Zoom, Duo, Skype, and Facetime.
    * If you use IP address, ensure the IP addresses are configured statically on
      the device, or configured with a static rule in the DHCP server.
 1. Interactive flows. Secure Shell (SSH) and telnet are included here. Other

@@ -165,11 +165,15 @@ add action=mark-packet chain=forward comment="Packet Mark: HTTP, HTTPS" \
 #    get [ find default-name=ether1 ] value-name=name ] passthrough=yes \
 #    src-mac-address=F8:0F:F9:49:DB:4B
 add action=mark-connection chain=forward comment="Classify: SMTP" \
-    connection-state=new dst-port=25 new-connection-mark=bulk \
+    connection-state=new dst-port=25,465,2525 new-connection-mark=bulk \
     out-interface=[ /interface get [ find default-name=ether1 ] \
     value-name=name ] passthrough=yes protocol=tcp
 add action=mark-connection chain=forward comment="Classify: FTP" \
     connection-state=new connection-type=ftp new-connection-mark=bulk \
+    out-interface=[ /interface get [ find default-name=ether1 ] \
+    value-name=name ] passthrough=yes protocol=tcp
+add action=mark-connection chain=forward comment="Classify: FTPS" \
+    connection-state=new dst-port=990 new-connection-mark=bulk \
     out-interface=[ /interface get [ find default-name=ether1 ] \
     value-name=name ] passthrough=yes protocol=tcp
 add action=mark-packet chain=forward comment="Mark Packet: bulk" \

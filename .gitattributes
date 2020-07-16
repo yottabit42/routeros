@@ -1,1 +1,1 @@
-*.rsc linguist-language=RouterOS
+*.rsc -linguist-detectable

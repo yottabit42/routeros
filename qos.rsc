@@ -130,7 +130,7 @@ add action=mark-connection chain=forward \
 add action=mark-packet chain=forward comment="Packet Mark: Video call" \
     connection-mark=video_call new-packet-mark=video_call passthrough=no
 ################################################################################
-##  P5: Interactive streams.                                                  ##
+##  P5: Interactive flows.                                                    ##
 ################################################################################
 # Example for interactive device by MAC, such as Stadia Wi-Fi controller.
 #add action=mark-connection chain=forward comment=stadia-1404 \
@@ -148,7 +148,7 @@ add action=mark-connection chain=forward comment="Classify: Telnet" \
 add action=mark-packet chain=forward comment="Packet Mark: Interactive" \
     connection-mark=interactive new-packet-mark=interactive passthrough=no
 ################################################################################
-##  P6: HTTP/HTTPS streams.                                                   ##
+##  P6: HTTP/HTTPS flows.                                                     ##
 ################################################################################
 add action=mark-connection chain=forward comment="Classify: HTTP, HTTPS" \
     connection-state=new dst-port=80,443 new-connection-mark=http_https \
@@ -157,7 +157,7 @@ add action=mark-connection chain=forward comment="Classify: HTTP, HTTPS" \
 add action=mark-packet chain=forward comment="Packet Mark: HTTP, HTTPS" \
     connection-mark=http_https new-packet-mark=http_https passthrough=no
 ################################################################################
-##  P8: Bulk streams.                                                         ##
+##  P8: Bulk flows.                                                           ##
 ################################################################################
 # Example for bulk-only device by MAC address.
 #add action=mark-connection chain=forward comment="Classify: File server" \
@@ -175,7 +175,7 @@ add action=mark-connection chain=forward comment="Classify: FTP" \
 add action=mark-packet chain=forward comment="Mark Packet: bulk" \
     connection-mark=bulk new-packet-mark=bulk passthrough=no
 ################################################################################
-##  P7: Default streams. n.b., this P7 is intentionally entered after P8.     ##
+##  P7: Default flows. n.b., this P7 is intentionally entered after P8.       ##
 ################################################################################
 add action=mark-packet chain=forward comment="Packet Mark: Default" \
     new-packet-mark=default passthrough=no

@@ -7,11 +7,12 @@
 interface. If you are using something else, change this value everywhere in the
 script.
 
-**Important:** You must disable any _action=fasttrack-connection_ rules in IP ->
-Firewall -> Filter, or Queue Tree cannot work properly and will not have the
-intended effect. You can disable these rules by clicking the "D" button in Webfig
-or Winbox, rather than deleting with the "-" button. TODO: automatically match
-and disable fasttrack rules in the provisoining script.
+**Important:** The script automatically disables the fasttrack rule from the
+stock configuration. If you have created other _action=fasttrack-connection_
+rules, you will need to disable them manually in IP -> Firewall -> Filter, or
+Queue Tree cannot work properly on outbound traffic classified for 
+prioritization. You can disable these rules by clicking the "D" button in Webfig
+or Winbox, rather than deleting with the "-" button.
 
 **Important:** You must perform upload speed tests to your ISP's **own** servers
 to determine your exact generally achievable rate. Set the `max-limit=` to

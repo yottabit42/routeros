@@ -134,7 +134,6 @@ add name=8_Bulk packet-mark=bulk parent=iNetEgress priority=8 \
     add list=zoom address=221.122.88.128/25
     add list=zoom address=221.122.89.128/25
     add list=zoom address=221.123.139.192/27
-    add list=zoom address=2620:123:2000::/40
 
 ################################################################################
 ##  Fasttrack must be disabled for Queue Trees to function.                   ##

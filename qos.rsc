@@ -136,6 +136,16 @@ add name=8_Bulk packet-mark=bulk parent=iNetEgress priority=8 \
     add list=zoom address=221.123.139.192/27
     add list=zoom address=2620:123:2000::/40
 
+################################################################################
+##  Fasttrack must be disabled for Queue Trees to function.                   ##
+##  Note: only the stock configuration rule is matched and disabled; if you   ##
+##  have created other fasttrack rules, you will need to disable them         ##
+##  manually if they would match outbound traffic for prioritization.         ##
+################################################################################
+/ip firewall filter
+disable [ find action=fasttrack-connection chain=forward \
+        connection-state=established,related ]
+
 /ip firewall mangle
 ################################################################################
 ##  P1: TCP 3-way-handshake setup.                                            ##

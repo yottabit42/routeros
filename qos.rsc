@@ -330,3 +330,8 @@ add action=mark-packet chain=forward comment="Mark Packet: bulk" \
 ################################################################################
 add action=mark-packet chain=forward comment="Packet Mark: Default" \
     new-packet-mark=default passthrough=no
+
+################################################################################
+##  Remove all connection tracking entries so classifiers start immediately.  ##
+################################################################################
+/ip firewall connection remove numbers=[find]

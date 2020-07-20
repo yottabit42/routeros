@@ -153,10 +153,6 @@ add action=mark-packet chain=forward comment="Packet Mark: TCP SYN" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
     default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-123 \
     protocol=tcp tcp-flags=syn
-add action=mark-packet chain=forward comment="Packet Mark: TCP SYN-ACK" \
-    new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
-    default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-123 \
-    protocol=tcp tcp-flags=ack,syn
 add action=mark-packet chain=forward comment="Packet Mark: TCP ACK" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
     default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-64 \
@@ -165,10 +161,6 @@ add action=mark-packet chain=output comment="Packet Mark: TCP SYN" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
     default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-123 \
     protocol=tcp tcp-flags=syn
-add action=mark-packet chain=output comment="Packet Mark: TCP SYN-ACK" \
-    new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
-    default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-123 \
-    protocol=tcp tcp-flags=ack,syn
 add action=mark-packet chain=output comment="Packet Mark: TCP ACK" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
     default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-64 \

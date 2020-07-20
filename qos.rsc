@@ -159,7 +159,7 @@ add action=mark-packet chain=forward comment="Packet Mark: TCP SYN-ACK" \
     protocol=tcp tcp-flags=ack,syn
 add action=mark-packet chain=forward comment="Packet Mark: TCP ACK" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
-    default-name=ether1 ] value-name=name ] passthrough=no packet-size=52 \
+    default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-64 \
     protocol=tcp tcp-flags=ack
 add action=mark-packet chain=output comment="Packet Mark: TCP SYN" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
@@ -171,7 +171,7 @@ add action=mark-packet chain=output comment="Packet Mark: TCP SYN-ACK" \
     protocol=tcp tcp-flags=ack,syn
 add action=mark-packet chain=output comment="Packet Mark: TCP ACK" \
     new-packet-mark=tcp_syn_ack out-interface=[ /interface get [ find \
-    default-name=ether1 ] value-name=name ] passthrough=no packet-size=52 \
+    default-name=ether1 ] value-name=name ] passthrough=no packet-size=0-64 \
     protocol=tcp tcp-flags=ack
 ################################################################################
 ##  P2: Domain Name Service and Network Time Protocol.                        ##

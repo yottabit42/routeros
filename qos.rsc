@@ -35,6 +35,16 @@ add name=8_Bulk packet-mark=bulk parent=iNetEgress priority=8 \
     queue=wireless-default
 
 ################################################################################
+##  Fasttrack must be disabled for Queue Trees to function.                   ##
+##  Note: only the stock configuration rule is matched and disabled; if you   ##
+##  have created other fasttrack rules, you will need to disable them         ##
+##  manually if they would match outbound traffic for prioritization.         ##
+################################################################################
+/ip firewall filter
+disable [ find action=fasttrack-connection chain=forward \
+        connection-state=established,related ]
+
+################################################################################
 ##  Address lists for Zoom. Reference:                                        ##
 ##  https://support.zoom.us/hc/en-us/articles/201362683-Network-firewall-or-proxy-server-settings-for-Zoom
 ################################################################################
@@ -135,16 +145,6 @@ add name=8_Bulk packet-mark=bulk parent=iNetEgress priority=8 \
     add list=zoom address=221.122.89.128/25
     add list=zoom address=221.123.139.192/27
 
-################################################################################
-##  Fasttrack must be disabled for Queue Trees to function.                   ##
-##  Note: only the stock configuration rule is matched and disabled; if you   ##
-##  have created other fasttrack rules, you will need to disable them         ##
-##  manually if they would match outbound traffic for prioritization.         ##
-################################################################################
-/ip firewall filter
-disable [ find action=fasttrack-connection chain=forward \
-        connection-state=established,related ]
-
 /ip firewall mangle
 ################################################################################
 ##  P1: TCP 3-way-handshake setup.                                            ##
@@ -233,7 +233,6 @@ add action=mark-connection chain=forward \
     dst-port=19305-19309 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
     value-name=name ] passthrough=yes protocol=tcp
-# TODO: Classifiers for Zoom, Skype, Duo, Facetime.
 add action=mark-connection chain=forward comment="Classify: Google Duo calls" \
     connection-state=new dst-port=16600-18000 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
@@ -326,4 +325,4 @@ add action=mark-packet chain=forward comment="Packet Mark: Default" \
 ################################################################################
 ##  Remove all connection tracking entries so classifiers start immediately.  ##
 ################################################################################
-/ip firewall connection remove numbers=[find]
+/ip firewall connection remove numbers=[ find ]

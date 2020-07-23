@@ -1,7 +1,37 @@
 # RouterOS Configurations
 
+## fail2ban.rsc
+### Basic emulation of the fail2ban application directly in Router OS
+
+**Important:** These rules must be placed higher than a matching drop rule, or
+it will have no effect.
+
+Block SSH attempts to the router by detecting four attempts within three
+minutes. Unlike fail2ban, SSH log files are not analyzed, and a simpler approach
+is used.
+
+If the same source IP address attempts to make four new connections to the SSH
+port (TCP/22) within three minutes, we assume it is being denied login, and it
+continues to guess common usernames and passwords. At that point the source IP
+address is added to an SSH blacklist for one day.
+
+Attempts by the source IP address to access other services is not blocked, but
+the script is easily modified to block all access, if desired. Remove the
+`protocol` and `dst-port` definitions from the first rule, and all services will
+be blocked from that source address to the router.
+
+If you desire to block SSH attempts to devices behind the router, change
+`chain=input` to `chain=forward` for all rules, and optionally adjust other
+matching criteria as needed.
+
+You can also adapt the ruleset to  support other services such as FTP, etc., by
+adjusting the matching criteria. Keep in mind whether you need `chain=input`
+(the router itself) or `chain=forward` (devices behind the router), and adjust
+accordingly.
+
 ## qos.rsc
 ### 2-Step QoS using using eight priorities and a preconfigured set of classifiers
+
 
 **Important:** The script assumes you are using the default `ether1` WAN/Internet
 interface. If you are using something else, change this value everywhere in the

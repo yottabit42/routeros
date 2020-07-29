@@ -109,6 +109,8 @@ The "2-step QoS" approach is generally defined as such:
 1. Mark all packets of the connection by checking the value of the Connection
    marking
 
+#### Defined Queues (1-8, from highest-to-lowest priority)
+
 The eight queues are arranged as follows, in order of highest priority to
 lowest:
 1. TCP 3-way handshake and TCP ACKs. This allows the setup of new TCP

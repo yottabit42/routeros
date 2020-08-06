@@ -1,5 +1,12 @@
 # RouterOS Configurations
 
+## BackupAndUpdate.rsc
+### Check for updates, backup and export configuration, perform update, daily.
+
+After running this script, adjust parameters such as email sending by editing
+the script in `/system scripts`. You can also change the schedule in `/system
+scheduler`.
+
 ## fail2ban.rsc
 ### Basic emulation of the fail2ban application directly in Router OS
 

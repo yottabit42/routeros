@@ -1,16 +1,6 @@
 # Script name: BackupAndUpdate
 #
-#----------SCRIPT INFORMATION---------------------------------------------------
-#
-# Script:  Mikrotik RouterOS automatic backup & update
-# Version: 20.04.17
-# Created: 07/08/2018
-# Updated: 17/04/2020
-# Author:  Alexander Tebiev
-# Website: https://github.com/beeyev
-# You can contact me by e-mail at tebiev@mail.com
-#
-# IMPORTANT!
+# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17).
 # Minimum supported RouterOS version is v6.43.7
 #
 #----------MODIFY THIS SECTION AS NEEDED----------------------------------------
@@ -28,7 +18,7 @@
 #
 # osnotify 	- 	The script will send email notification only (without backups) if a new RouterOS is available.
 #				Change parameter `forceBackup` if you need the script to create backups every time when it runs.
-:local scriptMode "backup";
+:local scriptMode "osupdate";
 
 ## Additional parameter if you set `scriptMode` to `osupdate` or `osnotify`
 # Set `true` if you want the script to perform backup every time it's fired, whatever script mode is set.
@@ -38,7 +28,7 @@
 :local backupPassword ""
 
 ## If true, passwords will be included in exported config.
-:local sensetiveDataInConfig false;
+:local sensetiveDataInConfig true;
 
 ## Update channel. Possible values: stable, long-term, testing, development
 :local updateChannel "stable";
@@ -62,8 +52,8 @@
 
 #Check proper email config
 :if ([:len $emailAddress] = 0 or [:len [/tool e-mail get address]] = 0 or [:len [/tool e-mail get from]] = 0) do={
-	:log error ("$SMP Email configuration is not correct, please check Tools -> Email. Script stopped.");   
-	:error "$SMP bye!";
+	:log error ("$SMP Email configuration is not correct, please check Tools -> Email.");   
+#	:error "$SMP bye!";
 }
 
 #Check if proper identity name is set
@@ -140,6 +130,13 @@ if ([:len [/system identity get name]] = 0 or [/system identity get name] = "Mik
 	:local backupFileConfig "$backupName.rsc";
 	:local backupNames {$backupFileSys;$backupFileConfig};
 
+        ## Remove old backups if there is less than 3 MiB free space.
+        :if ( [/system resource get free-hdd-space] < 3145728) do={
+          /file
+	    remove [/file find name~".backup"]
+	    remove [/file find name~"*.rsc"]
+	}
+
 	## Make system backup
 	:if ([:len $backupPassword] = 0) do={
 		/system backup save dont-encrypt=yes name=$backupName;
@@ -183,6 +180,7 @@ if ([:len [/system identity get name]] = 0 or [/system identity get name] = "Mik
 :local isOsNeedsToBeUpdated	false;
 
 :local isSendEmailRequired	true;
+:local isNeverSendEmail		true;
 
 :local mailSubject   		"$SMP Device - $deviceIdentityNameShort.";
 :local mailBody 	 		"";
@@ -351,7 +349,7 @@ if ([:len [/system identity get name]] = 0 or [/system identity get name] = "Mik
 ##
 # Trying to send email with backups in attachment.
 
-:if ($isSendEmailRequired = true) do={
+:if ($isSendEmailRequired = true and $isNeverSendEmail = false) do={
 	:log info "$SMP Sending email message, it will take around half a minute...";
 	:do {/tool e-mail send to=$emailAddress subject=$mailSubject body=$mailBody file=$mailAttachments;} on-error={
 		:delay 5s;

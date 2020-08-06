@@ -525,3 +525,8 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n\r\
     \n:log info \"\$SMP script \\\"Mikrotik RouterOS automatic backup & update\
     \\\" completed it's job.\\r\\n\";"
+/system scheduler
+add interval=1d name=BackupAndUpdate on-event=\
+    "/system script run BackupAndUpdate;" policy=\
+    reboot,read,write,policy,test,password,sensitive start-date=jan/01/1970 \
+    start-time=03:00:00

@@ -41,8 +41,7 @@ add name=8_Bulk packet-mark=bulk parent=iNetEgress priority=8 \
 ##  manually if they would match outbound traffic for prioritization.         ##
 ################################################################################
 /ip firewall filter
-disable [ find action=fasttrack-connection chain=forward \
-        connection-state=established,related ]
+disable [ find comment="defconf: fasttrack" ]
 
 ################################################################################
 ##  Address lists for Zoom. Reference:                                        ##

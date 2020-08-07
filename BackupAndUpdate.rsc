@@ -5,7 +5,7 @@
 # serial number = BB0C0BAFB0E0
 /system script
 add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
-    policy,reboot,read,write,sensitive,test source="#\
+    ftp,policy,reboot,read,write,sensitive,test source="#\
     \_Script name: BackupAndUpdate\r\
     \n#\r\
     \n# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17)\
@@ -70,7 +70,7 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n#Script messages prefix\r\
     \n:local SMP \"Bkp&Upd:\"\r\
     \n\r\
-    \n:log info \"\\r\\n\$SMP script \\\"Mikrotik RouterOS automatic backup & \
+    \n:log info \"$SMP script \\\"Mikrotik RouterOS automatic backup & \
     update\\\" started.\";\r\
     \n:log info \"\$SMP Script Mode: \$scriptMode, forceBackup: \$forceBackup\
     \";\r\
@@ -528,5 +528,5 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
 /system scheduler
 add interval=1d name=BackupAndUpdate on-event=\
     "/system script run BackupAndUpdate;" policy=\
-    policy,reboot,read,write,sensitive,test start-date=jan/01/1970 \
+    ftp,policy,reboot,read,write,sensitive,test start-date=jan/01/1970 \
     start-time=03:00:00

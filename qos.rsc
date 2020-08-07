@@ -235,7 +235,7 @@ add action=mark-connection chain=forward \
 add action=mark-connection chain=forward comment="Classify: Google Duo calls" \
     connection-state=new dst-port=16600-18000 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
-    protocol=udp value-name=name ] passthrough=yes
+    value-name=name ] passthrough=yes protocol=udp
 add action=mark-connection chain=forward comment="Classify: Zoom calls" \
     dst-address-list=zoom connection-state=new new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
@@ -243,7 +243,7 @@ add action=mark-connection chain=forward comment="Classify: Zoom calls" \
 add action=mark-connection chain=forward comment="Classify: Skype calls" \
     connection-state=new dst-port=50000-60000 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
-    protocol=udp value-name=name ] passthrough=yes
+    value-name=name ] passthrough=yes protocol=udp 
 add action=mark-connection chain=forward comment="Classify: Skype calls" \
     connection-state=new dst-port=3478-3481 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
@@ -255,15 +255,15 @@ add action=mark-connection chain=forward comment="Classify: Facetime calls" \
 add action=mark-connection chain=forward comment="Classify: Facetime calls" \
     connection-state=new dst-port=3478–3497 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
-    protocol=udp value-name=name ] passthrough=yes
+    value-name=name ] passthrough=yes protocol=udp 
 add action=mark-connection chain=forward comment="Classify: Facetime calls" \
     connection-state=new dst-port=16384-16387 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
-    protocol=udp value-name=name ] passthrough=yes
+    value-name=name ] passthrough=yes protocol=udp
 add action=mark-connection chain=forward comment="Classify: Facetime calls" \
     connection-state=new dst-port=16393-16402 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
-    protocol=udp value-name=name ] passthrough=yes
+    value-name=name ] passthrough=yes protocol=udp
 add action=mark-packet chain=forward comment="Packet Mark: Video call" \
     connection-mark=video_call new-packet-mark=video_call passthrough=no
 ################################################################################

@@ -247,7 +247,7 @@ add action=mark-connection chain=forward comment="Classify: Skype calls" \
 add action=mark-connection chain=forward comment="Classify: Skype calls" \
     connection-state=new dst-port=3478-3481 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \
-    protocol=udp value-name=name ] passthrough=yes
+    value-name=name ] passthrough=yes protocol=udp
 add action=mark-connection chain=forward comment="Classify: Facetime calls" \
     connection-state=new dst-port=5223 new-connection-mark=video_call \
     out-interface=[ /interface get [ find default-name=ether1 ] \

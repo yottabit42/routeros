@@ -5,7 +5,7 @@
 # serial number = BB0C0BAFB0E0
 /system script
 add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
-    reboot,read,write,sensitive source="#\
+    policy,reboot,read,write,sensitive,test source="#\
     \_Script name: BackupAndUpdate\r\
     \n#\r\
     \n# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17)\
@@ -528,5 +528,5 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
 /system scheduler
 add interval=1d name=BackupAndUpdate on-event=\
     "/system script run BackupAndUpdate;" policy=\
-    reboot,read,write,sensitive start-date=jan/01/1970 \
+    policy,reboot,read,write,sensitive,test start-date=jan/01/1970 \
     start-time=03:00:00

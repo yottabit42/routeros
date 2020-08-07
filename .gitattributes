@@ -1,1 +1,1 @@
-*.rsc -linguist-detectable
+*.rsc text -linguist-detectable eol=crl

@@ -4,10 +4,13 @@
 ################################################################################
 # rbX.local - Audience extension APs
 ################################################################################
+# Set to a strong, random password. SSH is open to WAN!
 :global passwd "W0lT3UISImum6BNsSySs"
 :global identity "rb2.local"
 # "America/Chicago", "America/Los_Angeles", etc.
 :global timezone "America/Chicago"
+:global extraUser "yottabit"
+# Set to a strong, random password. SSH is open to WAN!
 :global yottabitPassword "qy56pe5tpDZJCs085Q8c"
 ################################################################################
 
@@ -15,7 +18,7 @@
 # we assign a strong password here just for safety in case the SSH pubkey is
 # forgotten or deleted.
 /user
-add name="yottabit" group="full" password="$yottabitPassword"
+add name="$extraUser" group="full" password="$yottabitPassword"
 # SSH will be open to the Internet; only allow password login from the LAN.
 set [ find name=admin ] password="$passwd" address=192.168.88.0/24
 
@@ -30,6 +33,7 @@ remove [ find name="passwd" ]
 remove [ find name="identity" ]
 remove [ find name="timezone" ]
 remove [ find name="yottabitPassword" ]
+remove [ find name="extraUser" ]
 
 /system ntp client
 set enabled=yes primary-ntp=[ :resolve time1.google.com ] \

@@ -12,6 +12,8 @@
 :global sshPort "16774"
 # "America/Chicago", "America/Los_Angeles", etc.
 :global timezone "America/Chicago"
+:global extraUser "yottabit"
+# Disable extra user by default.
 :global disableYottabit "yes"
 # Set to a strong, random password. SSH is open to WAN!
 :global yottabitPassword "qy56pe5tpDZJCs085Q8c"
@@ -23,7 +25,7 @@
 # we assign a strong password here just for safety in case the SSH pubkey is
 # forgotten or deleted.
 /user
-add name="yottabit" group="full" disabled="$disableYottabit" \
+add name="$extraUser" group="full" disabled="$disableYottabit" \
     password="$yottabitPassword"
 # SSH will be open to the Internet; only allow password login from the LAN.
 set [ find name=admin ] password="$passwd" address=192.168.88.0/24
@@ -416,6 +418,8 @@ remove [ find name="timezone" ]
 remove [ find name="sshDisable" ]
 remove [ find name="uploadRate" ]
 remove [ find name="disableYottabit" ]
+remove [ find name="yottabitPassword" ]
+remove [ find name="extraUser" ]
 
 /tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/routeros/master/installBackupAndUpdate.rsc" output=file as-value
 /import file-name="installBackupAndUpdate.rsc"

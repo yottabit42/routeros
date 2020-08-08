@@ -1,12 +1,5 @@
 # RouterOS Configurations
 
-## BackupAndUpdate.rsc
-### Check for updates, backup and export configuration, perform update, daily.
-
-After running this script, adjust parameters such as email sending by editing
-the script in `/system scripts`. You can also change the schedule in `/system
-scheduler`.
-
 ## audience_rb1_tweaks.rsc
 ### Tweaks to Audience base configuration running as router + AP.
 * Sets router password

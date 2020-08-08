@@ -36,7 +36,8 @@ set [ find default-name=wlan3 ] adaptive-noise-immunity=ap-and-client-mode \
     indoors frequency=auto keepalive-frames=disabled wmm-support=enabled;
 
 /caps-man configuration
-set [ find name="cfg-2ghz" ] channel.frequency=2412,2437,2462
+set [ find name="cfg-2ghz" ] channel.frequency=2412,2437,2462 \
+    channel.band=2ghz-onlyn 
 set [ find name="cfg-5ghz-ac" ] channel.band=5ghz-n/ac \
     channel.extension-channel=XXXX
 set [ find ] installation=any keepalive-frames=disabled \

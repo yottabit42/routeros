@@ -38,7 +38,7 @@ set [ find default-name=wlan3 ] adaptive-noise-immunity=ap-and-client-mode \
 /caps-man configuration
 set [ find name="cfg-2ghz" ] channel.frequency=2412,2437,2462
 set [ find name="cfg-5ghz-ac" ] channel.band=5ghz-n/ac \
-    channel.extension-channel=XXXX channel.skip-dfs-channels=yes
+    channel.extension-channel=XXXX
 set [ find ] installation=any keepalive-frames=disabled \
     security.authentication-types=wpa2-psk security.disable-pmkid=yes \
     security.group-key-update=1h

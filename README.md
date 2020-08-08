@@ -7,8 +7,81 @@ After running this script, adjust parameters such as email sending by editing
 the script in `/system scripts`. You can also change the schedule in `/system
 scheduler`.
 
+## audience_rb1_tweaks.rsc
+### Tweaks to Audience base configuration running as router + AP.
+* Sets router password
+* Sets hostname
+* Sets timezone
+* Add extra user
+  * Typically used for remote access via SSH pubkey
+  * Installation of pubkey disables password logins for that user by default
+* Restrict the admin user to login from the default LAN only, to protect against
+  weak passwords and brute-force attempts to login from the WAN
+* Enable NTP client set to time1.google.com and time2.google.com
+* Create a daily scheduled event edits the NTP client configuration by resolving
+  time1.google.com and time2.google.com in case of IP address changes
+* Enables interface statistic graphing
+* Enables resource statistic graphing
+* Installs the BackupAndUpdate script and daily scheduled event
+  * Checks for new RouterOS and RouterBOOT versions daily at 0300
+  * Performs before-upgrade backup
+  * Upgrades
+  * Performs after-upgrade backup
+  * Can be configured to mail the backups to a user (not enabled by default)
+* Tweaks the CAPsMAN configuration for extra performance
+  * Sets the 2 GHz channels to 1, 6, and 11 only (2412, 2437, and 2462 MHz)
+  * Sets the 5 GHz to n+ac mode only
+  * Sets the channel width to 80 MHz
+  * Sets the distance to indoors
+  * Disables keepalive frames
+  * Sets security to wpa2 only
+  * Disables pmkid for security
+  * Sets the group key timeout to 1h
+* Tweaks the wlan3 default interfaces with tuned parameters for extra
+  performance
+  * Enables adaptive noise immunity mode
+  * Sets the interface to 802.11ac mode only
+  * Sets the channel width to 80 MHz
+  * Sets the distance to indoors
+  * Disables keepalive frames
+  * Enables WMM
+  * Sets security to wpa2 only
+  * Disables pmkid for security
+  * Sets the frequency to auto
+* Enables MikroTik DDNS
+* Sets DHCP lease time to 1d
+* Sets the DNS servers preference
+* Sets the SSH port to 16774
+* Allows SSH from the WAN interface
+* Enables a Queue Tree configuration for QoS
+  * See **qos.rsc** section for more information
+
+## audience_rbX_tweaks.rsc
+### Tweaks to Audience base configuration running as extension/repeater.
+* Sets router password
+* Sets hostname
+* Sets timezone
+* Add extra user
+  * Typically used for remote access via SSH pubkey
+  * Installation of pubkey disables password logins for that user by default
+* Restrict the admin user to login from the default LAN only, to protect against
+  weak passwords and brute-force attempts to login from the WAN
+* Enable NTP client set to time1.google.com and time2.google.com
+* Create a daily scheduled event edits the NTP client configuration by resolving
+  time1.google.com and time2.google.com in case of IP address changes
+* Enables interface statistic graphing
+* Enables resource statistic graphing
+* Installs the BackupAndUpdate script and daily scheduled event
+  * Checks for new RouterOS and RouterBOOT versions daily at 0300
+  * Performs before-upgrade backup
+  * Upgrades
+  * Performs after-upgrade backup
+  * Can be configured to mail the backups to a user (not enabled by default)
+* Tweaks the wlan4 and wlan3 default interfaces with tuned parameters for extra
+  performance
+
 ## fail2ban.rsc
-### Basic emulation of the fail2ban application directly in Router OS
+### Basic emulation of the fail2ban application directly in Router OS.
 
 **Important:** These rules must be placed higher than a matching drop rule, or
 it will have no effect.
@@ -36,9 +109,17 @@ adjusting the matching criteria. Keep in mind whether you need `chain=input`
 (the router itself) or `chain=forward` (devices behind the router), and adjust
 accordingly.
 
-## qos.rsc
-### 2-Step QoS using using eight priorities and a preconfigured set of classifiers
+## installBackupAndUpdate.rsc
+### Script to install an automated Backup & Update script & scheduler.
 
+Originally forked from https://github.com/beeyev at version 20.04.17 (2020-04-17).
+Customized to be more friendly to local backups by:
+1. Not requiring an email address and sending configuration
+1. Checking free space before backup, and clearing old backups if necessary
+1. Preserving local backup files
+
+## qos.rsc
+### 2-Step QoS using using eight priorities and a preconfigured set of classifiers.
 
 **Important:** The script assumes you are using the default `ether1` WAN/Internet
 interface. If you are using something else, change this value everywhere in the

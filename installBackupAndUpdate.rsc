@@ -1,7 +1,12 @@
+# aug/06/2020 18:56:50 by RouterOS 6.47.1
+# software id = I1GP-C42D
+#
+# model = RBD25G-5HPacQD2HPnD
+# serial number = BB0C0BAFB0E0
 /system script
 add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
-    ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupA\
-    ndUpdate\r\
+    ftp,policy,reboot,read,write,sensitive,test source="#\
+    \_Script name: BackupAndUpdate\r\
     \n#\r\
     \n# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17)\
     .\r\
@@ -14,19 +19,19 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n:local emailAddress \"yourmail@example.com\";\r\
     \n\r\
     \n## Script mode, possible values: backup, osupdate, osnotify.\r\
-    \n# backup   -   Only backup will be performed. (default value, if none pr\
+    \n# backup \t- \tOnly backup will be performed. (default value, if none pr\
     ovided)\r\
     \n#\r\
-    \n# osupdate   -   The Script will install a new RouterOS if it is availab\
+    \n# osupdate \t- \tThe Script will install a new RouterOS if it is availab\
     le.\r\
-    \n#        It will also create backups before and after update process.\r\
-    \n#        Email will be sent only if a new RouterOS is available.\r\
-    \n#        Change parameter `forceBackup` if you need the script to create\
+    \n#\t\t\t\tIt will also create backups before and after update process.\r\
+    \n#\t\t\t\tEmail will be sent only if a new RouterOS is available.\r\
+    \n#\t\t\t\tChange parameter `forceBackup` if you need the script to create\
     \_backups every time when it runs.\r\
     \n#\r\
-    \n# osnotify   -   The script will send email notification only (without b\
+    \n# osnotify \t- \tThe script will send email notification only (without b\
     ackups) if a new RouterOS is available.\r\
-    \n#        Change parameter `forceBackup` if you need the script to create\
+    \n#\t\t\t\tChange parameter `forceBackup` if you need the script to create\
     \_backups every time when it runs.\r\
     \n:local scriptMode \"osupdate\";\r\
     \n\r\
@@ -53,7 +58,7 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n## Example: v6.43.6 => major.minor.PATCH\r\
     \n## Script will send information if new version is greater than just patc\
     h.\r\
-    \n:local installOnlyPatchUpdates  false;\r\
+    \n:local installOnlyPatchUpdates\tfalse;\r\
     \n\r\
     \n##----------------------------------------------------------------------\
     --------------------##\r\
@@ -65,23 +70,23 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n#Script messages prefix\r\
     \n:local SMP \"Bkp&Upd:\"\r\
     \n\r\
-    \n:log info \"$SMP script \\\"Mikrotik RouterOS automatic backup & update\\\" \
-    started.\";\r\
+    \n:log info \"$SMP script \\\"Mikrotik RouterOS automatic backup & \
+    update\\\" started.\";\r\
     \n:log info \"\$SMP Script Mode: \$scriptMode, forceBackup: \$forceBackup\
     \";\r\
     \n\r\
     \n#Check proper email config\r\
     \n:if ([:len \$emailAddress] = 0 or [:len [/tool e-mail get address]] = 0 \
     or [:len [/tool e-mail get from]] = 0) do={\r\
-    \n  :log error (\"\$SMP Email configuration is not correct, please check T\
+    \n\t:log error (\"\$SMP Email configuration is not correct, please check T\
     ools -> Email.\");   \r\
-    \n#  :error \"\$SMP bye!\";\r\
+    \n#\t:error \"\$SMP bye!\";\r\
     \n}\r\
     \n\r\
     \n#Check if proper identity name is set\r\
     \nif ([:len [/system identity get name]] = 0 or [/system identity get name\
     ] = \"MikroTik\") do={\r\
-    \n  :log warning (\"\$SMP Please set identity name of your device (System \
+    \n\t:log warning (\"\$SMP Please set identity name of your device (System \
     -> Identity), keep it short and informative.\");  \r\
     \n};\r\
     \n\r\
@@ -93,120 +98,102 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     rrent-RouterOS]];\r\
     \n# result will be: 64301, because current RouterOS version is: 6.43.1\r\
     \n:global buGlobalFuncGetOsVerNum do={\r\
-    \n  :local osVer \$paramOsVer;\r\
-    \n  :local osVerNum;\r\
-    \n  :local osVerMicroPart;\r\
-    \n  :local zro 0;\r\
-    \n  :local tmp;\r\
-    \n  \r\
-    \n  # Replace word `beta` with dot\r\
-    \n  :local isBetaPos [:tonum [:find \$osVer \"beta\" 0]];\r\
-    \n  :if (\$isBetaPos > 1) do={\r\
-    \n    :set osVer ([:pick \$osVer 0 \$isBetaPos] . \".\" . [:pick \$osVer (\
+    \n\t:local osVer \$paramOsVer;\r\
+    \n\t:local osVerNum;\r\
+    \n\t:local osVerMicroPart;\r\
+    \n\t:local zro 0;\r\
+    \n\t:local tmp;\r\
+    \n\t\r\
+    \n\t# Replace word `beta` with dot\r\
+    \n\t:local isBetaPos [:tonum [:find \$osVer \"beta\" 0]];\r\
+    \n\t:if (\$isBetaPos > 1) do={\r\
+    \n\t\t:set osVer ([:pick \$osVer 0 \$isBetaPos] . \".\" . [:pick \$osVer (\
     \$isBetaPos + 4) [:len \$osVer]]);\r\
-    \n  }\r\
-    \n  \r\
-    \n  :local dotPos1 [:find \$osVer \".\" 0];\r\
+    \n\t}\r\
+    \n\t\r\
+    \n\t:local dotPos1 [:find \$osVer \".\" 0];\r\
     \n\r\
-    \n  :if (\$dotPos1 > 0) do={ \r\
+    \n\t:if (\$dotPos1 > 0) do={ \r\
     \n\r\
-    \n    # AA\r\
-    \n    :set osVerNum  [:pick \$osVer 0 \$dotPos1];\r\
-    \n    \r\
-    \n    :local dotPos2 [:find \$osVer \".\" \$dotPos1];\r\
-    \n        #Taking minor version, everything after first dot\r\
-    \n    :if ([:len \$dotPos2] = 0)   do={:set tmp [:pick \$osVer (\$dotPos1+\
+    \n\t\t# AA\r\
+    \n\t\t:set osVerNum  [:pick \$osVer 0 \$dotPos1];\r\
+    \n\t\t\r\
+    \n\t\t:local dotPos2 [:find \$osVer \".\" \$dotPos1];\r\
+    \n\t\t\t\t#Taking minor version, everything after first dot\r\
+    \n\t\t:if ([:len \$dotPos2] = 0) \tdo={:set tmp [:pick \$osVer (\$dotPos1+\
     1) [:len \$osVer]];}\r\
-    \n    #Taking minor version, everything between first and second dots\r\
-    \n    :if (\$dotPos2 > 0)       do={:set tmp [:pick \$osVer (\$dotPos1+1) \
+    \n\t\t#Taking minor version, everything between first and second dots\r\
+    \n\t\t:if (\$dotPos2 > 0) \t\t\tdo={:set tmp [:pick \$osVer (\$dotPos1+1) \
     \$dotPos2];}\r\
-    \n    \r\
-    \n    # AA 0B\r\
-    \n    :if ([:len \$tmp] = 1)   do={:set osVerNum \"\$osVerNum\$zro\$tmp\";\
+    \n\t\t\r\
+    \n\t\t# AA 0B\r\
+    \n\t\t:if ([:len \$tmp] = 1) \tdo={:set osVerNum \"\$osVerNum\$zro\$tmp\";\
     }\r\
-    \n    # AA BB\r\
-    \n    :if ([:len \$tmp] = 2)   do={:set osVerNum \"\$osVerNum\$tmp\";}\r\
-    \n    \r\
-    \n    :if (\$dotPos2 > 0) do={ \r\
-    \n      :set tmp [:pick \$osVer (\$dotPos2+1) [:len \$osVer]];\r\
-    \n      # AA BB 0C\r\
-    \n      :if ([:len \$tmp] = 1) do={:set osVerNum \"\$osVerNum\$zro\$tmp\";\
+    \n\t\t# AA BB\r\
+    \n\t\t:if ([:len \$tmp] = 2) \tdo={:set osVerNum \"\$osVerNum\$tmp\";}\r\
+    \n\t\t\r\
+    \n\t\t:if (\$dotPos2 > 0) do={ \r\
+    \n\t\t\t:set tmp [:pick \$osVer (\$dotPos2+1) [:len \$osVer]];\r\
+    \n\t\t\t# AA BB 0C\r\
+    \n\t\t\t:if ([:len \$tmp] = 1) do={:set osVerNum \"\$osVerNum\$zro\$tmp\";\
     }\r\
-    \n      # AA BB CC\r\
-    \n      :if ([:len \$tmp] = 2) do={:set osVerNum \"\$osVerNum\$tmp\";}\r\
-    \n    } else={\r\
-    \n      # AA BB 00\r\
-    \n      :set osVerNum \"\$osVerNum\$zro\$zro\";\r\
-    \n    }\r\
-    \n  } else={\r\
-    \n    # AA 00 00\r\
-    \n    :set osVerNum \"\$osVer\$zro\$zro\$zro\$zro\";\r\
-    \n  }\r\
+    \n\t\t\t# AA BB CC\r\
+    \n\t\t\t:if ([:len \$tmp] = 2) do={:set osVerNum \"\$osVerNum\$tmp\";}\r\
+    \n\t\t} else={\r\
+    \n\t\t\t# AA BB 00\r\
+    \n\t\t\t:set osVerNum \"\$osVerNum\$zro\$zro\";\r\
+    \n\t\t}\r\
+    \n\t} else={\r\
+    \n\t\t# AA 00 00\r\
+    \n\t\t:set osVerNum \"\$osVer\$zro\$zro\$zro\$zro\";\r\
+    \n\t}\r\
     \n\r\
-    \n  :return \$osVerNum;\r\
+    \n\t:return \$osVerNum;\r\
     \n}\r\
     \n\r\
     \n# Function creates backups (system and config) and returns array with na\
     mes\r\
     \n# Possible arguments: \r\
-    \n#  `backupName`       | string  | backup file name, without extension!\r\
-    \n#  `backupPassword`    | string   |\r\
-    \n#  `sensetiveDataInConfig`  | boolean   |\r\
+    \n#\t`backupName` \t\t\t| string\t| backup file name, without extension!\r\
+    \n#\t`backupPassword`\t\t| string \t|\r\
+    \n#\t`sensetiveDataInConfig`\t| boolean \t|\r\
     \n# Example:\r\
     \n# :put [\$buGlobalFuncCreateBackups name=\"daily-backup\"];\r\
     \n:global buGlobalFuncCreateBackups do={\r\
-    \n  :log info (\"\$SMP Global function \\\"buGlobalFuncCreateBackups\\\" w\
+    \n\t:log info (\"\$SMP Global function \\\"buGlobalFuncCreateBackups\\\" w\
     as fired.\");  \r\
-    \n  \r\
-    \n    :local backupFileSys \"\$backupName.backup\";\r\
-    \n    :local backupFileConfig \"\$backupName.rsc\";\r\
-    \n    :local backupNames {\$backupFileSys;\$backupFileConfig};\r\
+    \n\t\r\
+    \n\t:local backupFileSys \"\$backupName.backup\";\r\
+    \n\t:local backupFileConfig \"\$backupName.rsc\";\r\
+    \n\t:local backupNames {\$backupFileSys;\$backupFileConfig};\r\
     \n\r\
-    \n  ## Remove old backups if there is less than 3 MiB free space.\r\
-    \n  :if ( [/system resource get free-hdd-space] < 3145728) do={\r\
-    \n    /file\r\
-    \n      remove [/file find name~\".backup\"]\r\
-    \n      remove [/file find name~\"*.rsc\"]\r\
-    \n  }\r\
+    \n        ## Remove old backups if there is less than 3 MiB free space.\r\
+    \n        :if ( [/system resource get free-hdd-space] < 3145728) do={\r\
+    \n          /file\r\
+    \n\t    remove [/file find name~\".backup\"]\r\
+    \n\t    remove [/file find name~\"*.rsc\"]\r\
+    \n\t}\r\
     \n\r\
-    \n  ## Make system backup\r\
-    \n  :if ([:len \$backupPassword] = 0) do={\r\
-    \n    :if ([ /file find name~\"flash\" ]) do={\r\
-    \n      /system backup save dont-encrypt=yes name=(\"flash/\" . \$backupNa\
-    me);\r\
-    \n    } else={\r\
-    \n      /system backup save dont-encrypt=yes name=\"backupName;\r\
-    \n    }\r\
-    \n  } else={\r\
-    \n    :if ([ /file find name~\"flash\" ]) do={\r\
-    \n      /system backup save password=\$backupPassword name=(\"flash/\" . \
-    \$backupName);\r\
-    \n    } else={\r\
-    \n      /system backup save password=\$backupPassword name=\$backupName;\r\
-    \n    }\r\
-    \n  }\r\
-    \n  :log info (\"\$SMP System backup created. \$backupFileSys\");   \r\
+    \n\t## Make system backup\r\
+    \n\t:if ([:len \$backupPassword] = 0) do={\r\
+    \n\t\t/system backup save dont-encrypt=yes name=\$backupName;\r\
+    \n\t} else={\r\
+    \n\t\t/system backup save password=\$backupPassword name=\$backupName;\r\
+    \n\t}\r\
+    \n\t:log info (\"\$SMP System backup created. \$backupFileSys\");   \r\
     \n\r\
-    \n  ## Export config file\r\
-    \n  :if (\$sensetiveDataInConfig = true) do={\r\
-    \n    :if ([ /file find name~\"flash\" ]) do={\r\
-    \n      /export compact file=(\"flash/\" . \$backupName);\r\
-    \n    } else={\r\
-    \n      /export compact file=\$backupName;\r\
-    \n    }\r\
-    \n  } else={\r\
-    \n    :if ([ /file find name~\"flash\" ]) do={\r\
-    \n      /export compact hide-sensitive file=(flash/\" . \$backupName);\r\
-    \n    } else={\r\
-    \n      /export compact hide-sensitive file=\$backupName;\r\
-    \n    }\r\
-    \n  }\r\
-    \n  :log info (\"\$SMP Config file was exported. \$backupFileConfig\");   \
+    \n\t## Export config file\r\
+    \n\t:if (\$sensetiveDataInConfig = true) do={\r\
+    \n\t\t/export compact file=\$backupName;\r\
+    \n\t} else={\r\
+    \n\t\t/export compact hide-sensitive file=\$backupName;\r\
+    \n\t}\r\
+    \n\t:log info (\"\$SMP Config file was exported. \$backupFileConfig\");   \
     \r\
     \n\r\
-    \n  #Delay after creating backups\r\
-    \n  :delay 5s;  \r\
-    \n  :return \$backupNames;\r\
+    \n\t#Delay after creating backups\r\
+    \n\t:delay 5s;\t\r\
+    \n\t:return \$backupNames;\r\
     \n}\r\
     \n\r\
     \n:global buGlobalVarUpdateStep;\r\
@@ -218,254 +205,254 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     pick [/system clock get time] 0 2] . [:pick [/system clock get time] 3 5] \
     . [:pick [/system clock get time] 6 8]);\r\
     \n\r\
-    \n:local deviceOsVerInst       [/system package update get installed-versi\
+    \n:local deviceOsVerInst \t\t\t[/system package update get installed-versi\
     on];\r\
-    \n:local deviceOsVerInstNum     [\$buGlobalFuncGetOsVerNum paramOsVer=\$de\
+    \n:local deviceOsVerInstNum \t\t[\$buGlobalFuncGetOsVerNum paramOsVer=\$de\
     viceOsVerInst];\r\
-    \n:local deviceOsVerAvail     \"\";\r\
-    \n:local deviceOsVerAvailNum     0;\r\
-    \n:local deviceRbModel      [/system routerboard get model];\r\
-    \n:local deviceRbSerialNumber   [/system routerboard get serial-number];\r\
-    \n:local deviceRbCurrentFw     [/system routerboard get current-firmware];\
+    \n:local deviceOsVerAvail \t\t\"\";\r\
+    \n:local deviceOsVerAvailNum \t\t0;\r\
+    \n:local deviceRbModel\t\t\t[/system routerboard get model];\r\
+    \n:local deviceRbSerialNumber \t[/system routerboard get serial-number];\r\
+    \n:local deviceRbCurrentFw \t\t[/system routerboard get current-firmware];\
     \r\
-    \n:local deviceRbUpgradeFw     [/system routerboard get upgrade-firmware];\
+    \n:local deviceRbUpgradeFw \t\t[/system routerboard get upgrade-firmware];\
     \r\
-    \n:local deviceIdentityName     [/system identity get name];\r\
-    \n:local deviceIdentityNameShort   [:pick \$deviceIdentityName 0 18]\r\
-    \n:local deviceUpdateChannel     [/system package update get channel];\r\
+    \n:local deviceIdentityName \t\t[/system identity get name];\r\
+    \n:local deviceIdentityNameShort \t[:pick \$deviceIdentityName 0 18]\r\
+    \n:local deviceUpdateChannel \t\t[/system package update get channel];\r\
     \n\r\
-    \n:local isOsUpdateAvailable   false;\r\
-    \n:local isOsNeedsToBeUpdated  false;\r\
+    \n:local isOsUpdateAvailable \tfalse;\r\
+    \n:local isOsNeedsToBeUpdated\tfalse;\r\
     \n\r\
-    \n:local isSendEmailRequired  true;\r\
-    \n:local isNeverSendEmail    true;\r\
+    \n:local isSendEmailRequired\ttrue;\r\
+    \n:local isNeverSendEmail\t\ttrue;\r\
     \n\r\
-    \n:local mailSubject       \"\$SMP Device - \$deviceIdentityNameShort.\";\
+    \n:local mailSubject   \t\t\"\$SMP Device - \$deviceIdentityNameShort.\";\
     \r\
-    \n:local mailBody        \"\";\r\
+    \n:local mailBody \t \t\t\"\";\r\
     \n\r\
-    \n:local mailBodyDeviceInfo  \"\\r\\n\\r\\nDevice information: \\r\\nIdent\
+    \n:local mailBodyDeviceInfo\t\"\\r\\n\\r\\nDevice information: \\r\\nIdent\
     ity: \$deviceIdentityName \\r\\nModel: \$deviceRbModel \\r\\nSerial number\
     : \$deviceRbSerialNumber \\r\\nCurrent RouterOS: \$deviceOsVerInst (\$[/sy\
     stem package update get channel]) \$[/system resource get build-time] \\r\
     \\nCurrent routerboard FW: \$deviceRbCurrentFw \\r\\nDevice uptime: \$[/sy\
     stem resource get uptime]\";\r\
-    \n:local mailBodyCopyright   \"\\r\\n\\r\\nMikrotik RouterOS automatic bac\
+    \n:local mailBodyCopyright \t\"\\r\\n\\r\\nMikrotik RouterOS automatic bac\
     kup & update \\r\\nhttps://github.com/beeyev/Mikrotik-RouterOS-automatic-b\
     ackup-and-update\";\r\
-    \n:local changelogUrl      (\"Check RouterOS changelog: https://mikrotik.c\
+    \n:local changelogUrl\t\t\t(\"Check RouterOS changelog: https://mikrotik.c\
     om/download/changelogs/\" . \$updateChannel . \"-release-tree\");\r\
     \n\r\
-    \n:local backupName       \"\$deviceIdentityName.\$deviceRbModel.\$deviceR\
+    \n:local backupName \t\t\t\"\$deviceIdentityName.\$deviceRbModel.\$deviceR\
     bSerialNumber.v\$deviceOsVerInst.\$deviceUpdateChannel.\$dateTime\";\r\
-    \n:local backupNameBeforeUpd  \"backup_before_update_\$backupName\";\r\
-    \n:local backupNameAfterUpd  \"backup_after_update_\$backupName\";\r\
+    \n:local backupNameBeforeUpd\t\"backup_before_update_\$backupName\";\r\
+    \n:local backupNameAfterUpd\t\"backup_after_update_\$backupName\";\r\
     \n\r\
-    \n:local backupNameFinal    \$backupName;\r\
-    \n:local mailAttachments    [:toarray \"\"];\r\
+    \n:local backupNameFinal\t\t\$backupName;\r\
+    \n:local mailAttachments\t\t[:toarray \"\"];\r\
     \n\r\
     \n:local updateStep \$buGlobalVarUpdateStep;\r\
     \n:do {/system script environment remove buGlobalVarUpdateStep;} on-error=\
     {}\r\
     \n:if ([:len \$updateStep] = 0) do={\r\
-    \n  :set updateStep 1;\r\
+    \n\t:set updateStep 1;\r\
     \n}\r\
     \n\r\
     \n\r\
-    \n##   STEP ONE: Creating backups, checking for new RouterOs version and s\
+    \n## \tSTEP ONE: Creating backups, checking for new RouterOs version and s\
     ending email with backups,\r\
-    \n##   steps 2 and 3 are fired only if script is set to automatically upda\
+    \n## \tsteps 2 and 3 are fired only if script is set to automatically upda\
     te device and if new RouterOs is available.\r\
     \n:if (\$updateStep = 1) do={\r\
-    \n  :log info (\"\$SMP Performing the first step.\");   \r\
+    \n\t:log info (\"\$SMP Performing the first step.\");   \r\
     \n\r\
-    \n  # Checking for new RouterOS version\r\
-    \n  if (\$scriptMode = \"osupdate\" or \$scriptMode = \"osnotify\") do={\r\
-    \n    log info (\"\$SMP Checking for new RouterOS version. Current version\
+    \n\t# Checking for new RouterOS version\r\
+    \n\tif (\$scriptMode = \"osupdate\" or \$scriptMode = \"osnotify\") do={\r\
+    \n\t\tlog info (\"\$SMP Checking for new RouterOS version. Current version\
     \_is: \$deviceOsVerInst\");\r\
-    \n    /system package update set channel=\$updateChannel;\r\
-    \n    /system package update check-for-updates;\r\
-    \n    :delay 5s;\r\
-    \n    :set deviceOsVerAvail [/system package update get latest-version];\r\
+    \n\t\t/system package update set channel=\$updateChannel;\r\
+    \n\t\t/system package update check-for-updates;\r\
+    \n\t\t:delay 5s;\r\
+    \n\t\t:set deviceOsVerAvail [/system package update get latest-version];\r\
     \n\r\
-    \n    # If there is a problem getting information about available RouterOS\
+    \n\t\t# If there is a problem getting information about available RouterOS\
     \_from server\r\
-    \n    :if ([:len \$deviceOsVerAvail] = 0) do={\r\
-    \n      :log warning (\"\$SMP There is a problem getting information about\
+    \n\t\t:if ([:len \$deviceOsVerAvail] = 0) do={\r\
+    \n\t\t\t:log warning (\"\$SMP There is a problem getting information about\
     \_new RouterOS from server.\");\r\
-    \n      :set mailSubject  (\$mailSubject . \" Error: No data about new Rou\
+    \n\t\t\t:set mailSubject\t(\$mailSubject . \" Error: No data about new Rou\
     terOS!\")\r\
-    \n      :set mailBody     (\$mailBody . \"Error occured! \\r\\nMikrotik co\
+    \n\t\t\t:set mailBody \t\t(\$mailBody . \"Error occured! \\r\\nMikrotik co\
     uldn't get any information about new RouterOS from server! \\r\\nWatch add\
     itional information in device logs.\")\r\
-    \n    } else={\r\
-    \n      #Get numeric version of OS\r\
-    \n      :set deviceOsVerAvailNum [\$buGlobalFuncGetOsVerNum paramOsVer=\$d\
+    \n\t\t} else={\r\
+    \n\t\t\t#Get numeric version of OS\r\
+    \n\t\t\t:set deviceOsVerAvailNum [\$buGlobalFuncGetOsVerNum paramOsVer=\$d\
     eviceOsVerAvail];\r\
     \n\r\
-    \n      # Checking if OS on server is greater than installed one.\r\
-    \n      :if (\$deviceOsVerAvailNum > \$deviceOsVerInstNum) do={\r\
-    \n        :set isOsUpdateAvailable true;\r\
-    \n        :log info (\"\$SMP New RouterOS is available! \$deviceOsVerAvail\
+    \n\t\t\t# Checking if OS on server is greater than installed one.\r\
+    \n\t\t\t:if (\$deviceOsVerAvailNum > \$deviceOsVerInstNum) do={\r\
+    \n\t\t\t\t:set isOsUpdateAvailable true;\r\
+    \n\t\t\t\t:log info (\"\$SMP New RouterOS is available! \$deviceOsVerAvail\
     \");\r\
-    \n      } else={\r\
-    \n        :set isSendEmailRequired false;\r\
-    \n        :log info (\"\$SMP System is already up to date.\");\r\
-    \n        :set mailSubject (\$mailSubject . \" No new OS updates.\");\r\
-    \n        :set mailBody    (\$mailBody . \"Your system is up to date.\");\
+    \n\t\t\t} else={\r\
+    \n\t\t\t\t:set isSendEmailRequired false;\r\
+    \n\t\t\t\t:log info (\"\$SMP System is already up to date.\");\r\
+    \n\t\t\t\t:set mailSubject (\$mailSubject . \" No new OS updates.\");\r\
+    \n\t\t\t\t:set mailBody \t (\$mailBody . \"Your system is up to date.\");\
     \r\
-    \n      }\r\
-    \n    };\r\
-    \n  } else={\r\
-    \n    :set scriptMode \"backup\";\r\
-    \n  };\r\
+    \n\t\t\t}\r\
+    \n\t\t};\r\
+    \n\t} else={\r\
+    \n\t\t:set scriptMode \"backup\";\r\
+    \n\t};\r\
     \n\r\
-    \n  if (\$forceBackup = true) do={\r\
-    \n    # In this case the script will always send email, because it has to \
+    \n\tif (\$forceBackup = true) do={\r\
+    \n\t\t# In this case the script will always send email, because it has to \
     create backups\r\
-    \n    :set isSendEmailRequired true;\r\
-    \n  }\r\
+    \n\t\t:set isSendEmailRequired true;\r\
+    \n\t}\r\
     \n\r\
-    \n  # if new OS version is available to install\r\
-    \n  if (\$isOsUpdateAvailable = true and \$isSendEmailRequired = true) do=\
+    \n\t# if new OS version is available to install\r\
+    \n\tif (\$isOsUpdateAvailable = true and \$isSendEmailRequired = true) do=\
     {\r\
-    \n    # If we only need to notify about new available version\r\
-    \n    if (\$scriptMode = \"osnotify\") do={\r\
-    \n      :set mailSubject   (\$mailSubject . \" New RouterOS is available! \
+    \n\t\t# If we only need to notify about new available version\r\
+    \n\t\tif (\$scriptMode = \"osnotify\") do={\r\
+    \n\t\t\t:set mailSubject \t(\$mailSubject . \" New RouterOS is available! \
     v.\$deviceOsVerAvail.\")\r\
-    \n      :set mailBody     (\$mailBody . \"New RouterOS version is availabl\
+    \n\t\t\t:set mailBody \t\t(\$mailBody . \"New RouterOS version is availabl\
     e to install: v.\$deviceOsVerAvail (\$updateChannel) \\r\\n\$changelogUrl\
     \")\r\
-    \n    }\r\
+    \n\t\t}\r\
     \n\r\
-    \n    # if we need to initiate RouterOs update process\r\
-    \n    if (\$scriptMode = \"osupdate\") do={\r\
-    \n      :set isOsNeedsToBeUpdated true;\r\
-    \n      # if we need to install only patch updates\r\
-    \n      :if (\$installOnlyPatchUpdates = true) do={\r\
-    \n        #Check if Major and Minor builds are the same.\r\
-    \n        :if ([:pick \$deviceOsVerInstNum 0 ([:len \$deviceOsVerInstNum]-\
+    \n\t\t# if we need to initiate RouterOs update process\r\
+    \n\t\tif (\$scriptMode = \"osupdate\") do={\r\
+    \n\t\t\t:set isOsNeedsToBeUpdated true;\r\
+    \n\t\t\t# if we need to install only patch updates\r\
+    \n\t\t\t:if (\$installOnlyPatchUpdates = true) do={\r\
+    \n\t\t\t\t#Check if Major and Minor builds are the same.\r\
+    \n\t\t\t\t:if ([:pick \$deviceOsVerInstNum 0 ([:len \$deviceOsVerInstNum]-\
     2)] = [:pick \$deviceOsVerAvailNum 0 ([:len \$deviceOsVerAvailNum]-2)]) do\
     ={\r\
-    \n          :log info (\"\$SMP New patch version of RouterOS firmware is a\
+    \n\t\t\t\t\t:log info (\"\$SMP New patch version of RouterOS firmware is a\
     vailable.\");   \r\
-    \n        } else={\r\
-    \n          :log info (\"\$SMP New major or minor version of RouterOS firm\
+    \n\t\t\t\t} else={\r\
+    \n\t\t\t\t\t:log info (\"\$SMP New major or minor version of RouterOS firm\
     ware is available. You need to update it manually.\");\r\
-    \n          :set mailSubject   (\$mailSubject . \" New RouterOS: v.\$devic\
+    \n\t\t\t\t\t:set mailSubject \t(\$mailSubject . \" New RouterOS: v.\$devic\
     eOsVerAvail needs to be installed manually.\");\r\
-    \n          :set mailBody     (\$mailBody . \"New major or minor RouterOS \
+    \n\t\t\t\t\t:set mailBody \t\t(\$mailBody . \"New major or minor RouterOS \
     version is available to install: v.\$deviceOsVerAvail (\$updateChannel). \
     \\r\\nYou chose to automatically install only patch updates, so this major\
     \_update you need to install manually. \\r\\n\$changelogUrl\");\r\
-    \n          :set isOsNeedsToBeUpdated false;\r\
-    \n        }\r\
-    \n      }\r\
+    \n\t\t\t\t\t:set isOsNeedsToBeUpdated false;\r\
+    \n\t\t\t\t}\r\
+    \n\t\t\t}\r\
     \n\r\
-    \n      #Check again, because this variable could be changed during checki\
+    \n\t\t\t#Check again, because this variable could be changed during checki\
     ng for installing only patch updats\r\
-    \n      if (\$isOsNeedsToBeUpdated = true) do={\r\
-    \n        :log info (\"\$SMP New RouterOS is going to be installed! v.\$de\
+    \n\t\t\tif (\$isOsNeedsToBeUpdated = true) do={\r\
+    \n\t\t\t\t:log info (\"\$SMP New RouterOS is going to be installed! v.\$de\
     viceOsVerInst -> v.\$deviceOsVerAvail\");\r\
-    \n        :set mailSubject  (\$mailSubject . \" New RouterOS is going to b\
+    \n\t\t\t\t:set mailSubject\t(\$mailSubject . \" New RouterOS is going to b\
     e installed! v.\$deviceOsVerInst -> v.\$deviceOsVerAvail.\");\r\
-    \n        :set mailBody     (\$mailBody . \"Your Mikrotik will be updated \
+    \n\t\t\t\t:set mailBody \t\t(\$mailBody . \"Your Mikrotik will be updated \
     to the new RouterOS version from v.\$deviceOsVerInst to v.\$deviceOsVerAva\
     il (Update channel: \$updateChannel) \\r\\nFinal report with the detailed \
     information will be sent when update process is completed. \\r\\nIf you ha\
     ve not received second email in the next 5 minutes, then probably somethin\
     g went wrong. (Check your device logs)\");\r\
-    \n        #!! There is more code connected to this part and first step at \
+    \n\t\t\t\t#!! There is more code connected to this part and first step at \
     the end of the script.\r\
-    \n      }\r\
-    \n    \r\
-    \n    }\r\
-    \n  }\r\
+    \n\t\t\t}\r\
+    \n\t\t\r\
+    \n\t\t}\r\
+    \n\t}\r\
     \n\r\
-    \n  ## Checking If the script needs to create a backup\r\
-    \n  :log info (\"\$SMP Checking If the script needs to create a backup.\")\
+    \n\t## Checking If the script needs to create a backup\r\
+    \n\t:log info (\"\$SMP Checking If the script needs to create a backup.\")\
     ;\r\
-    \n  if (\$forceBackup = true or \$scriptMode = \"backup\" or \$isOsNeedsTo\
+    \n\tif (\$forceBackup = true or \$scriptMode = \"backup\" or \$isOsNeedsTo\
     BeUpdated = true) do={\r\
-    \n    :log info (\"\$SMP Creating system backups.\");\r\
-    \n    if (\$isOsNeedsToBeUpdated = true) do={\r\
-    \n      :set backupNameFinal \$backupNameBeforeUpd;\r\
-    \n    };\r\
-    \n    if (\$scriptMode != \"backup\") do={\r\
-    \n      :set mailBody (\$mailBody . \"\\r\\n\\r\\n\");\r\
-    \n    };\r\
+    \n\t\t:log info (\"\$SMP Creating system backups.\");\r\
+    \n\t\tif (\$isOsNeedsToBeUpdated = true) do={\r\
+    \n\t\t\t:set backupNameFinal \$backupNameBeforeUpd;\r\
+    \n\t\t};\r\
+    \n\t\tif (\$scriptMode != \"backup\") do={\r\
+    \n\t\t\t:set mailBody (\$mailBody . \"\\r\\n\\r\\n\");\r\
+    \n\t\t};\r\
     \n\r\
-    \n    :set mailSubject  (\$mailSubject . \" Backup was created.\");\r\
-    \n    :set mailBody    (\$mailBody . \"System backups were created and att\
+    \n\t\t:set mailSubject\t(\$mailSubject . \" Backup was created.\");\r\
+    \n\t\t:set mailBody\t\t(\$mailBody . \"System backups were created and att\
     ached to this email.\");\r\
     \n\r\
-    \n    :set mailAttachments [\$buGlobalFuncCreateBackups backupName=\$backu\
+    \n\t\t:set mailAttachments [\$buGlobalFuncCreateBackups backupName=\$backu\
     pNameFinal backupPassword=\$backupPassword sensetiveDataInConfig=\$senseti\
     veDataInConfig];\r\
-    \n  } else={\r\
-    \n    :log info (\"\$SMP There is no need to create a backup.\");\r\
-    \n  }\r\
+    \n\t} else={\r\
+    \n\t\t:log info (\"\$SMP There is no need to create a backup.\");\r\
+    \n\t}\r\
     \n\r\
-    \n  # Combine fisrst step email\r\
-    \n  :set mailBody (\$mailBody . \$mailBodyDeviceInfo . \$mailBodyCopyright\
+    \n\t# Combine fisrst step email\r\
+    \n\t:set mailBody (\$mailBody . \$mailBodyDeviceInfo . \$mailBodyCopyright\
     );\r\
     \n}\r\
     \n\r\
-    \n##   STEP TWO: (after first reboot) routerboard firmware upgrade\r\
-    \n##   steps 2 and 3 are fired only if script is set to automatically upda\
+    \n## \tSTEP TWO: (after first reboot) routerboard firmware upgrade\r\
+    \n## \tsteps 2 and 3 are fired only if script is set to automatically upda\
     te device and if new RouterOs is available.\r\
     \n:if (\$updateStep = 2) do={\r\
-    \n  :log info (\"\$SMP Performing the second step.\");   \r\
-    \n  ## RouterOS is the latest, let's check for upgraded routerboard firmwa\
+    \n\t:log info (\"\$SMP Performing the second step.\");   \r\
+    \n\t## RouterOS is the latest, let's check for upgraded routerboard firmwa\
     re\r\
-    \n  if (\$deviceRbCurrentFw != \$deviceRbUpgradeFw) do={\r\
-    \n    :set isSendEmailRequired false;\r\
-    \n    :delay 10s;\r\
-    \n    :log info \"\$SMP Upgrading routerboard firmware from v.\$deviceRbCu\
+    \n\tif (\$deviceRbCurrentFw != \$deviceRbUpgradeFw) do={\r\
+    \n\t\t:set isSendEmailRequired false;\r\
+    \n\t\t:delay 10s;\r\
+    \n\t\t:log info \"\$SMP Upgrading routerboard firmware from v.\$deviceRbCu\
     rrentFw to v.\$deviceRbUpgradeFw\";\r\
-    \n    ## Start the upgrading process\r\
-    \n    /system routerboard upgrade;\r\
-    \n    ## Wait until the upgrade is completed\r\
-    \n    :delay 5s;\r\
-    \n    :log info \"\$SMP routerboard upgrade process was completed, going t\
+    \n\t\t## Start the upgrading process\r\
+    \n\t\t/system routerboard upgrade;\r\
+    \n\t\t## Wait until the upgrade is completed\r\
+    \n\t\t:delay 5s;\r\
+    \n\t\t:log info \"\$SMP routerboard upgrade process was completed, going t\
     o reboot in a moment!\";\r\
-    \n    ## Set scheduled task to send final report on the next boot, task wi\
+    \n\t\t## Set scheduled task to send final report on the next boot, task wi\
     ll be deleted when is is done. (That is why you should keep original scrip\
     t name)\r\
-    \n    /system schedule add name=BKPUPD-FINAL-REPORT-ON-NEXT-BOOT on-event=\
+    \n\t\t/system schedule add name=BKPUPD-FINAL-REPORT-ON-NEXT-BOOT on-event=\
     \":delay 5s; /system scheduler remove BKPUPD-FINAL-REPORT-ON-NEXT-BOOT; :g\
     lobal buGlobalVarUpdateStep 3; :delay 10s; /system script run BackupAndUpd\
     ate;\" start-time=startup interval=0;\r\
-    \n    ## Reboot system to boot with new firmware\r\
-    \n    /system reboot;\r\
-    \n  } else={\r\
-    \n    :log info \"\$SMP It appers that your routerboard is already up to d\
+    \n\t\t## Reboot system to boot with new firmware\r\
+    \n\t\t/system reboot;\r\
+    \n\t} else={\r\
+    \n\t\t:log info \"\$SMP It appers that your routerboard is already up to d\
     ate, skipping this step.\";\r\
-    \n    :set updateStep 3;\r\
-    \n  };\r\
+    \n\t\t:set updateStep 3;\r\
+    \n\t};\r\
     \n}\r\
     \n\r\
-    \n##   STEP THREE: Last step (after second reboot) sending final report\r\
-    \n##   steps 2 and 3 are fired only if script is set to automatically upda\
+    \n## \tSTEP THREE: Last step (after second reboot) sending final report\r\
+    \n## \tsteps 2 and 3 are fired only if script is set to automatically upda\
     te device and if new RouterOs is available.\r\
     \n:if (\$updateStep = 3) do={\r\
-    \n  :log info (\"\$SMP Performing the third step.\");   \r\
-    \n  :log info \"Bkp&Upd: RouterOS and routerboard upgrade process was comp\
+    \n\t:log info (\"\$SMP Performing the third step.\");   \r\
+    \n\t:log info \"Bkp&Upd: RouterOS and routerboard upgrade process was comp\
     leted. New RouterOS version: v.\$deviceOsVerInst, routerboard firmware: v.\
     \$deviceRbCurrentFw.\";\r\
-    \n  ## Small delay in case mikrotik needs some time to initialize connecti\
+    \n\t## Small delay in case mikrotik needs some time to initialize connecti\
     ons\r\
-    \n  :log info \"\$SMP The final email with report and backups of upgraded \
+    \n\t:log info \"\$SMP The final email with report and backups of upgraded \
     system will be sent in a minute.\";\r\
-    \n  :delay 1m;\r\
-    \n  :set mailSubject  (\$mailSubject . \" RouterOS Upgrade is completed, n\
+    \n\t:delay 1m;\r\
+    \n\t:set mailSubject\t(\$mailSubject . \" RouterOS Upgrade is completed, n\
     ew version: v.\$deviceOsVerInst!\");\r\
-    \n  :set mailBody       \"RouterOS and routerboard upgrade process was com\
+    \n\t:set mailBody \t  \t\"RouterOS and routerboard upgrade process was com\
     pleted. \\r\\nNew RouterOS version: v.\$deviceOsVerInst, routerboard firmw\
     are: v.\$deviceRbCurrentFw. \\r\\n\$changelogUrl \\r\\n\\r\\nBackups of th\
     e upgraded system are in the attachment of this email.  \$mailBodyDeviceIn\
     fo \$mailBodyCopyright\";\r\
-    \n  :set mailAttachments [\$buGlobalFuncCreateBackups backupName=\$backupN\
+    \n\t:set mailAttachments [\$buGlobalFuncCreateBackups backupName=\$backupN\
     ameAfterUpd backupPassword=\$backupPassword sensetiveDataInConfig=\$senset\
     iveDataInConfig];\r\
     \n}\r\
@@ -482,58 +469,58 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n# Trying to send email with backups in attachment.\r\
     \n\r\
     \n:if (\$isSendEmailRequired = true and \$isNeverSendEmail = false) do={\r\
-    \n  :log info \"\$SMP Sending email message, it will take around half a mi\
+    \n\t:log info \"\$SMP Sending email message, it will take around half a mi\
     nute...\";\r\
-    \n  :do {/tool e-mail send to=\$emailAddress subject=\$mailSubject body=\$\
+    \n\t:do {/tool e-mail send to=\$emailAddress subject=\$mailSubject body=\$\
     mailBody file=\$mailAttachments;} on-error={\r\
-    \n    :delay 5s;\r\
-    \n    :log error \"\$SMP could not send email message (\$[/tool e-mail get\
+    \n\t\t:delay 5s;\r\
+    \n\t\t:log error \"\$SMP could not send email message (\$[/tool e-mail get\
     \_last-status]). Going to try it again in a while.\"\r\
     \n\r\
-    \n    :delay 5m;\r\
+    \n\t\t:delay 5m;\r\
     \n\r\
-    \n    :do {/tool e-mail send to=\$emailAddress subject=\$mailSubject body=\
+    \n\t\t:do {/tool e-mail send to=\$emailAddress subject=\$mailSubject body=\
     \$mailBody file=\$mailAttachments;} on-error={\r\
-    \n      :delay 5s;\r\
-    \n      :log error \"\$SMP could not send email message (\$[/tool e-mail g\
+    \n\t\t\t:delay 5s;\r\
+    \n\t\t\t:log error \"\$SMP could not send email message (\$[/tool e-mail g\
     et last-status]) for the second time.\"\r\
     \n\r\
-    \n      if (\$isOsNeedsToBeUpdated = true) do={\r\
-    \n        :set isOsNeedsToBeUpdated false;\r\
-    \n        :log warning \"\$SMP script is not goint to initialise update pr\
+    \n\t\t\tif (\$isOsNeedsToBeUpdated = true) do={\r\
+    \n\t\t\t\t:set isOsNeedsToBeUpdated false;\r\
+    \n\t\t\t\t:log warning \"\$SMP script is not goint to initialise update pr\
     ocess due to inability to send backups to email.\"\r\
-    \n      }\r\
-    \n    }\r\
-    \n  }\r\
+    \n\t\t\t}\r\
+    \n\t\t}\r\
+    \n\t}\r\
     \n\r\
-    \n  :delay 30s;\r\
-    \n  \r\
-    \n  :if ([:len \$mailAttachments] > 0 and [/tool e-mail get last-status] =\
+    \n\t:delay 30s;\r\
+    \n\t\r\
+    \n\t:if ([:len \$mailAttachments] > 0 and [/tool e-mail get last-status] =\
     \_\"succeeded\") do={\r\
-    \n    :log info \"\$SMP File system cleanup.\"\r\
-    \n    /file remove \$mailAttachments; \r\
-    \n    :delay 2s;\r\
-    \n  }\r\
-    \n  \r\
+    \n\t\t:log info \"\$SMP File system cleanup.\"\r\
+    \n\t\t/file remove \$mailAttachments; \r\
+    \n\t\t:delay 2s;\r\
+    \n\t}\r\
+    \n\t\r\
     \n}\r\
     \n\r\
     \n\r\
     \n# Fire RouterOs update process\r\
     \nif (\$isOsNeedsToBeUpdated = true) do={\r\
     \n\r\
-    \n  ## Set scheduled task to upgrade routerboard firmware on the next boot\
+    \n\t## Set scheduled task to upgrade routerboard firmware on the next boot\
     , task will be deleted when upgrade is done. (That is why you should keep \
     original script name)\r\
-    \n  /system schedule add name=BKPUPD-UPGRADE-ON-NEXT-BOOT on-event=\":dela\
+    \n\t/system schedule add name=BKPUPD-UPGRADE-ON-NEXT-BOOT on-event=\":dela\
     y 5s; /system scheduler remove BKPUPD-UPGRADE-ON-NEXT-BOOT; :global buGlob\
     alVarUpdateStep 2; :delay 10s; /system script run BackupAndUpdate;\" start\
     -time=startup interval=0;\r\
     \n   \r\
     \n   :log info \"\$SMP everything is ready to install new RouterOS, going \
     to reboot in a moment!\"\r\
-    \n  ## command is reincarnation of the \"upgrade\" command - doing exactly\
+    \n\t## command is reincarnation of the \"upgrade\" command - doing exactly\
     \_the same but under a different name\r\
-    \n  /system package update install;\r\
+    \n\t/system package update install;\r\
     \n}\r\
     \n\r\
     \n:log info \"\$SMP script \\\"Mikrotik RouterOS automatic backup & update\
@@ -543,4 +530,3 @@ add interval=1d name=BackupAndUpdate on-event=\
     "/system script run BackupAndUpdate;" policy=\
     ftp,policy,reboot,read,write,sensitive,test start-date=jan/01/1970 \
     start-time=03:00:00
-;

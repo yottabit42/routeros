@@ -2,7 +2,6 @@
 # software id = I1GP-C42D
 #
 # model = RBD25G-5HPacQD2HPnD
-# serial number = BB0C0BAFB0E0
 /system script
 add dont-require-permissions=no name=script1 owner=yottabit policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\
     \n#\r\

@@ -18,7 +18,7 @@
 #
 # osnotify   -   The script will send email notification only (without backups) if a new RouterOS is available.
 #        Change parameter `forceBackup` if you need the script to create backups every time when it runs.
-:local scriptMode "backup";
+:local scriptMode "osupdate";
 
 ## Additional parameter if you set `scriptMode` to `osupdate` or `osnotify`
 # Set `true` if you want the script to perform backup every time it's fired, whatever script mode is set.

@@ -1,6 +1,4 @@
 # aug/06/2020 18:56:50 by RouterOS 6.47.1
-# software id = I1GP-C42D
-#
 # model = RBD25G-5HPacQD2HPnD
 /system script
 add dont-require-permissions=no name=script1 owner=yottabit policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\

@@ -1,12 +1,7 @@
-# aug/06/2020 18:56:50 by RouterOS 6.47.1
-# software id = I1GP-C42D
-#
-# model = RBD25G-5HPacQD2HPnD
-# serial number = BB0C0BAFB0E0
 /system script
 add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
-    ftp,policy,reboot,read,write,sensitive,test source="#\
-    \_Script name: BackupAndUpdate\r\
+    ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupA\
+    ndUpdate\r\
     \n#\r\
     \n# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17)\
     .\r\
@@ -70,8 +65,8 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n#Script messages prefix\r\
     \n:local SMP \"Bkp&Upd:\"\r\
     \n\r\
-    \n:log info \"$SMP script \\\"Mikrotik RouterOS automatic backup & \
-    update\\\" started.\";\r\
+    \n:log info \"$SMP script \\\"Mikrotik RouterOS automatic backup & update\\\" \
+    started.\";\r\
     \n:log info \"\$SMP Script Mode: \$scriptMode, forceBackup: \$forceBackup\
     \";\r\
     \n\r\
@@ -163,30 +158,48 @@ add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=\
     \n  :log info (\"\$SMP Global function \\\"buGlobalFuncCreateBackups\\\" w\
     as fired.\");  \r\
     \n  \r\
-    \n  :local backupFileSys \"\$backupName.backup\";\r\
-    \n  :local backupFileConfig \"\$backupName.rsc\";\r\
-    \n  :local backupNames {\$backupFileSys;\$backupFileConfig};\r\
+    \n    :local backupFileSys \"\$backupName.backup\";\r\
+    \n    :local backupFileConfig \"\$backupName.rsc\";\r\
+    \n    :local backupNames {\$backupFileSys;\$backupFileConfig};\r\
     \n\r\
-    \n        ## Remove old backups if there is less than 3 MiB free space.\r\
-    \n        :if ( [/system resource get free-hdd-space] < 3145728) do={\r\
-    \n          /file\r\
+    \n  ## Remove old backups if there is less than 3 MiB free space.\r\
+    \n  :if ( [/system resource get free-hdd-space] < 3145728) do={\r\
+    \n    /file\r\
     \n      remove [/file find name~\".backup\"]\r\
     \n      remove [/file find name~\"*.rsc\"]\r\
     \n  }\r\
     \n\r\
     \n  ## Make system backup\r\
     \n  :if ([:len \$backupPassword] = 0) do={\r\
-    \n    /system backup save dont-encrypt=yes name=\$backupName;\r\
+    \n    :if ([ /file find name~\"flash\" ]) do={\r\
+    \n      /system backup save dont-encrypt=yes name=(\"flash/\" . \$backupNa\
+    me);\r\
+    \n    } else={\r\
+    \n      /system backup save dont-encrypt=yes name=\"backupName;\r\
+    \n    }\r\
     \n  } else={\r\
-    \n    /system backup save password=\$backupPassword name=\$backupName;\r\
+    \n    :if ([ /file find name~\"flash\" ]) do={\r\
+    \n      /system backup save password=\$backupPassword name=(\"flash/\" . \
+    \$backupName);\r\
+    \n    } else={\r\
+    \n      /system backup save password=\$backupPassword name=\$backupName;\r\
+    \n    }\r\
     \n  }\r\
     \n  :log info (\"\$SMP System backup created. \$backupFileSys\");   \r\
     \n\r\
     \n  ## Export config file\r\
     \n  :if (\$sensetiveDataInConfig = true) do={\r\
-    \n    /export compact file=\$backupName;\r\
+    \n    :if ([ /file find name~\"flash\" ]) do={\r\
+    \n      /export compact file=(\"flash/\" . \$backupName);\r\
+    \n    } else={\r\
+    \n      /export compact file=\$backupName;\r\
+    \n    }\r\
     \n  } else={\r\
-    \n    /export compact hide-sensitive file=\$backupName;\r\
+    \n    :if ([ /file find name~\"flash\" ]) do={\r\
+    \n      /export compact hide-sensitive file=(flash/\" . \$backupName);\r\
+    \n    } else={\r\
+    \n      /export compact hide-sensitive file=\$backupName;\r\
+    \n    }\r\
     \n  }\r\
     \n  :log info (\"\$SMP Config file was exported. \$backupFileConfig\");   \
     \r\

@@ -1,7 +1,7 @@
 # aug/06/2020 18:56:50 by RouterOS 6.47.1
 # model = RBD25G-5HPacQD2HPnD
 /system script
-add dont-require-permissions=no name=script1 owner=yottabit policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\
+add dont-require-permissions=no name=BackupAndUpdate owner=yottabit policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\
     \n#\r\
     \n# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17).\r\
     \n# Minimum supported RouterOS version is v6.43.7\r\

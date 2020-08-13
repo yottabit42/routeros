@@ -137,7 +137,7 @@ add dont-require-permissions=no name=script1 owner=yottabit policy=ftp,reboot,re
     \n        :if ( [/system resource get free-hdd-space] < 3145728) do={\r\
     \n          /file\r\
     \n      remove [/file find name~\".backup\"]\r\
-    \n      remove [/file find name~\"*.rsc\"]\r\
+    \n      remove [/file find name~\".rsc\"]\r\
     \n  }\r\
     \n\r\
     \n  ## Make system backup\r\

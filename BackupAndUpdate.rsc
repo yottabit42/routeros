@@ -134,7 +134,7 @@ if ([:len [/system identity get name]] = 0 or [/system identity get name] = "Mik
         :if ( [/system resource get free-hdd-space] < 3145728) do={
           /file
       remove [/file find name~".backup"]
-      remove [/file find name~"*.rsc"]
+      remove [/file find name~".rsc"]
   }
 
   ## Make system backup

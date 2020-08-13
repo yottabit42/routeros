@@ -155,9 +155,17 @@ if ([:len [/system identity get name]] = 0 or [/system identity get name] = "Mik
 
   ## Export config file
   :if ($sensetiveDataInConfig = true) do={
-    /export compact file=$backupName;
+    :if ([ /file find name~"flash" ]) do={
+      /export compact file=("flash/" . $backupName);
+    } else={
+      /export compact file=$backupName;
+    }
   } else={
-    /export compact hide-sensitive file=$backupName;
+    :if ([ /file find name~"flash" ]) do={
+      /export compact hide-sensitive file=("flash/" . $backupName);
+    } else={
+      /export compact hide-sensitive file=$backupName;
+    }
   }
   :log info ("$SMP Config file was exported. $backupFileConfig");   
 

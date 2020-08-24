@@ -5,7 +5,7 @@
 # rbX.local - non-CAP extension APs
 # Start from a blank config (System -> Reset Configuration -> No Defaults)
 ################################################################################
-:global passwd ""
+:global passwd "qy56pe5tpDZJCs085Q8c"
 :global identity "rb2.local"
 :global wifiSSID ""
 :global wifiWPA2 ""
@@ -18,7 +18,7 @@
 # forgotten or deleted.
 /user
 add name="yottabit" group="full" \
-    password="foobaryaz"
+    password="qy56pe5tpDZJCs085Q8c"
 # SSH will be open to the Internet; only allow password login from the LAN.
 set [ find name=admin ] password="$passwd" address=192.168.88.0/24
 

@@ -4,7 +4,7 @@
 ################################################################################
 # rb1.local - non-CAPsMAN main router
 ################################################################################
-:global passwd ""
+:global passwd "qy56pe5tpDZJCs085Q8c"
 :global identity "rb1.local"
 # "" or "8.8.8.8,8.8.4.4", etc.
 :global dns "8.8.8.8,8.8.4.4"
@@ -23,7 +23,7 @@
 # forgotten or deleted.
 /user
 add name="yottabit" group="full" disabled="$disableYottabit" \
-    password="foobaryaz"
+    password="qy56pe5tpDZJCs085Q8c"
 # SSH will be open to the Internet; only allow password login from the LAN.
 set [ find name=admin ] password="$passwd" address=192.168.88.0/24
 

@@ -60,5 +60,3 @@ set [ find default-name=wlan3 ] adaptive-noise-immunity=ap-and-client-mode \
     indoors frequency=auto keepalive-frames=disabled wmm-support=enabled
 
 # Import the SSH pubkey.
-# Run BackupAndUpdate script with ScriptMode "backup".
-# Copy backup files off device.

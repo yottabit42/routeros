@@ -1,3 +1,20 @@
+################################################################################
+##  Fix incomplete mangle rules.                                              ##
+################################################################################
+##  Run the following commands to download and run this script:               ##
+##    /tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/routeros/master/fix_qos.rsc" output=file as-value
+##    /import file-name="fix_qos.rsc"
+##    :delay 2
+##    /file remove [ find name="fix_qos.rsc" ]
+################################################################################
+
+################################################################################
+##  Remove existing mangle rules.                                             ##
+################################################################################
+If you are not using only the defaults from the QoS script, you may want to   ##
+##  manually remove the defaults instead, preserving your custom rules.       ##
+##  Afterward, don't forget to re-order the rules appropriately.              ##
+################################################################################
 /ip firewall mangle
 remove [ find ]
 

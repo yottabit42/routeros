@@ -11,8 +11,8 @@
 ################################################################################
 ##  Remove existing mangle rules.                                             ##
 ################################################################################
-If you are not using only the defaults from the QoS script, you may want to   ##
-##  manually remove the defaults instead, preserving your custom rules.       ##
+## If you are not using only the defaults from the QoS script, you may want   ##
+##  to manually remove the defaults instead, preserving your custom rules.    ##
 ##  Afterward, don't forget to re-order the rules appropriately.              ##
 ################################################################################
 /ip firewall mangle

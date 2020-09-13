@@ -1,5 +1,14 @@
 # aug/06/2020 18:56:50 by RouterOS 6.47.1
 # model = RBD25G-5HPacQD2HPnD
+
+###
+# Run the following commands to auto-import this script:
+# /tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/routeros/master/installBackupAndUpdate.rsc" output=file as-value
+# /import file-name="installBackupAndUpdate.rsc"
+# :delay 2
+# /file remove [ find name="installBackupAndUpdate.rsc" ]
+###
+
 /system script
 add dont-require-permissions=no name=BackupAndUpdate owner=yottabit policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\
     \n#\r\

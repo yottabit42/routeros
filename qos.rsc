@@ -179,7 +179,7 @@ add action=mark-connection chain=output comment="Classify: DNS, TCP" \
     connection-state=new dst-port=53 new-connection-mark=dns_ntp \
     out-interface=[ /interface get [ find default-name=ether1 ] \
     value-name=name ] passthrough=yes protocol=tcp
-add action=mark-packet chain=output comment="Packet Mark: DNS" \
+add action=mark-packet chain=output comment="Packet Mark: NTP, DNS" \
     connection-mark=dns_ntp new-packet-mark=dns_ntp passthrough=no
 add action=mark-connection chain=forward comment="Classify: NTP" \
     connection-state=new dst-port=123 new-connection-mark=dns_ntp \
@@ -193,7 +193,7 @@ add action=mark-connection chain=forward comment="Classify: DNS, TCP" \
     connection-state=new dst-port=53 new-connection-mark=dns_ntp \
     out-interface=[ /interface get [ find default-name=ether1 ] \
     value-name=name ] passthrough=yes protocol=tcp
-add action=mark-packet chain=forward comment="Packet Mark: DNS" \
+add action=mark-packet chain=forward comment="Packet Mark: NTP, DNS" \
     connection-mark=dns_ntp new-packet-mark=dns_ntp passthrough=no
 ################################################################################
 ##  P3: Voice calls.                                                          ##

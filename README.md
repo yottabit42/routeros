@@ -1,5 +1,16 @@
 # RouterOS Configurations
 
+## dual_wan_failover.rsc
+### Dual-WAN failover using RouterOS v7.1.1.
+
+Useful for using a phone hotspot, or another slower backup Internet provider
+for failover in case the primary fails. Checks every one second, with automatic
+restoration.
+* Uses WAN1 for primary default gateway, and checks Google Honest DNS 8.8.8.8
+  for reachability.
+* Uses WAN2 for secondary (failover) default gateway, and checks Google Honest
+  DNS 8.8.4.4 for reachability.
+ 
 ## audience_rb1_tweaks.rsc
 ### Tweaks to Audience base configuration running as router + AP.
 * Sets router password

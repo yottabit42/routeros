@@ -10,7 +10,7 @@
 ###
 
 /system script
-add dont-require-permissions=no name=BackupAndUpdate owner=admin policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\
+add name=BackupAndUpdate owner=admin policy=ftp,reboot,read,write,policy,test,sensitive source="# Script name: BackupAndUpdate\r\
     \n#\r\
     \n# Forked from https://github.com/beeyev at version 20.04.17 (2020-04-17).\r\
     \n# Minimum supported RouterOS version is v6.43.7\r\

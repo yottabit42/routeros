@@ -3,7 +3,7 @@
 
 ###
 # Run the following commands to auto-import this script:
-# /tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/routeros/master/installBackupAndUpdate.rsc" output=file as-value
+# /tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/routeros/master/installBackupAndUpdate.rsc"
 # /import file-name="installBackupAndUpdate.rsc"
 # :delay 2
 # /file remove [ find name="installBackupAndUpdate.rsc" ]

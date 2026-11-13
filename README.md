@@ -114,13 +114,13 @@ adjusting the matching criteria. Keep in mind whether you need `chain=input`
 accordingly.
 
 ## installBackupAndUpdate.rsc
-### Script to install an automated Backup & Update script & scheduler.
+### Moved to [yottabit42/auto-rb-upgrade](https://github.com/yottabit42/auto-rb-upgrade).
 
-Originally forked from https://github.com/beeyev at version 20.04.17 (2020-04-17).
-Customized to be more friendly to local backups by:
-1. Not requiring an email address and sending configuration
-1. Checking free space before backup, and clearing old backups if necessary
-1. Preserving local backup files
+`BackupAndUpdate.rsc` and `installBackupAndUpdate.rsc` have moved to
+[yottabit42/auto-rb-upgrade](https://github.com/yottabit42/auto-rb-upgrade),
+where the script has been modernized and simplified for RouterOS v7.10+.
+The tweak scripts in this repository fetch `installBackupAndUpdate.rsc` from
+that repository.
 
 ## qos.rsc
 ### 2-Step QoS using using eight priorities and a preconfigured set of classifiers.

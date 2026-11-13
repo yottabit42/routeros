@@ -49,7 +49,7 @@ add interval=1d name=UpdateTimeServers on-event="/system ntp client\r\
 
 /tool graphing resource add
 
-/tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/routeros/master/installBackupAndUpdate.rsc" output=file as-value
+/tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=file as-value
 /import file-name="installBackupAndUpdate.rsc"
 /file remove [ find name="installBackupAndUpdate.rsc" ]
 

@@ -53,10 +53,10 @@ add interval=1d name=UpdateTimeServers on-event="/system ntp client\r\
 
 /tool graphing resource add
 
-/tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=file as-value
-/import file-name="installBackupAndUpdate.rsc"
-:delay 2
-/file remove [ find name~"installBackupAndUpdate.rsc" ]
+{
+  :local dl [/tool fetch url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=user as-value]
+  :if (($dl->"status") = "finished") do={ [[:parse ($dl->"data")]] }
+}
 
 /interface wireless security-profiles
 set [ find default=yes ] authentication-types=wpa2-psk disable-pmkid=yes \

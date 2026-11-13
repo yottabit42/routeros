@@ -49,9 +49,10 @@ add interval=1d name=UpdateTimeServers on-event="/system ntp client\r\
 
 /tool graphing resource add
 
-/tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=file as-value
-/import file-name="installBackupAndUpdate.rsc"
-/file remove [ find name="installBackupAndUpdate.rsc" ]
+{
+  :local dl [/tool fetch url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=user as-value]
+  :if (($dl->"status") = "finished") do={ [[:parse ($dl->"data")]] }
+}
 
 /interface wireless
 set [ find default-name=wlan4 ] keepalive-frames=disabled wmm-support=enabled

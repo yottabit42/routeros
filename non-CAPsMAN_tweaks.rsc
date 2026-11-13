@@ -85,9 +85,9 @@ remove [ find name="sshDisable" ]
 remove [ find name="uploadRate" ]
 remove [ find name="disableYottabit" ]
 
-/tool fetch mode=https url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=file as-value
-/import file-name="installBackupAndUpdate.rsc"
-:delay 2
-/file remove [ find name~"installBackupAndUpdate.rsc" ]
+{
+  :local dl [/tool fetch url="https://raw.githubusercontent.com/yottabit42/auto-rb-upgrade/master/installBackupAndUpdate.rsc" output=user as-value]
+  :if (($dl->"status") = "finished") do={ [[:parse ($dl->"data")]] }
+}
 
 # Import the SSH pubkey.
